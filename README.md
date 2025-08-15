@@ -5,8 +5,8 @@ Real-time blink **sequence** detection from a Muse EEG stream in Python, with se
 ---
 
 ## Repo Contents
-- `sequence_detection.py` — Muse OSC ingest, blink detection & classification, sequence detection, and serial send.
-- `eeg_actuation.ino` — Arduino sketch that receives commands and toggles servos on pins **3, 5, 6, 9, 10**.
+- `sequence_detection.py`: Muse OSC ingest, blink detection & classification, sequence detection, and serial send.
+- `eeg_actuation.ino`: Arduino sketch that receives commands and toggles servos on pins **3, 5, 6, 9, 10**.
 
 ---
 
@@ -25,7 +25,7 @@ Real-time blink **sequence** detection from a Muse EEG stream in Python, with se
 | S4    | 9           |
 | S5    | 10          |
 
-> Servos draw significant current. Power servos from a separate 5 V supply (capable of ≥2–3 A for five servos), and connect the supply **GND to Arduino GND**.
+> Power micro servos from a separate 5 V supply and connect the supply **GND to Arduino GND**.
 
 ---
 
