@@ -11,15 +11,15 @@ Real-time blink **sequence** detection from a Muse EEG stream in Python, with se
 ---
 
 ## Hardware
-- **Muse 2 headset** streaming via **Muse app** (OSC output enabled)  
-- **Arduino** (Uno/Nano/Leonardo or similar)  
+- **Muse 2 headset** streaming via **Muse app** (enable OSC output)  
+- **Arduino Uno**
 - **5× micro servos**  
-- **External 5 V power connected to Arduino** for servos (recommended)
+- **External 5V power connected to Arduino** for servos (recommended)
 
 ---
 
 ## Software Setup
 
-### Python -> be sure to install necessary libraries
+### Python -> install necessary libraries
 ```bash
 pip install numpy scipy python-osc pyserial
