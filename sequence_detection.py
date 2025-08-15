@@ -1,3 +1,4 @@
+# import necessary libraries 
 import numpy as np
 import time
 import serial
@@ -6,21 +7,17 @@ from scipy.signal import savgol_filter, find_peaks
 from pythonosc import dispatcher, osc_server
 import threading
 
-# === SETTINGS ===
 SERIAL_PORT = '/dev/cu.usbmodem101'
 BAUD_RATE = 9600
 FS = 256  # Sampling frequency (Hz)
 PROMINENCE = 90
 WINDOW_SECONDS = 2
 
-# === GLOBAL EEG BUFFER ===
 eeg_buffer = deque(maxlen=FS * WINDOW_SECONDS)
 
-# === BLINK EVENTS LOG ===
-classified_events = []  # List of dicts with 'start', 'end', 'type'
-global_offset = 0  # Tracks the index offset of the entire EEG stream
+classified_events = []  # list with start, end, and type (of blink)
+global_offset = 0  # tracks pos of blink in full EEG stream 
 
-# === OSC HANDLER ===
 def eeg_handler(unused_addr, *args):
     global global_offset
     try:
@@ -43,11 +40,12 @@ def detect_grouped_blink_boundaries(signal, fs=256, baseline_window=256, promine
     inverted = -signal #to find troughs
 
     troughs, props = find_peaks(inverted, distance=fs//10, prominence=prominence, width=1)
-    peaks, _ = find_peaks(signal, distance=fs//10, prominence=prominence) #used for long blinks
+    peaks, _ = find_peaks(signal, distance=fs//10, prominence=prominence)
 
     if len(troughs) == 0:
         return [], []
 
+    #increased functionality for longer blinks (i.e. blinks over 100 ms)
     first_width_ms = (props['widths'][0] / fs) * 1000 #for long blinks (generally have wider troughs)
     gap_ms = 1300 if first_width_ms > 140 else 500 #adaptive gap timing for long blinks
 
@@ -145,7 +143,6 @@ def send_to_arduino(message):
     except Exception as e:
         print(f"Failed to send to Arduino: {e}")
 
-# === MAIN LOOP ===
 def real_time_main():
     start_osc_listener()
     smoothed_buffer = deque(maxlen=FS * WINDOW_SECONDS) #most recent samples depending on sliding window duration (WINDOW_SECONDS)
