@@ -201,21 +201,23 @@ def real_time_main():
                 blink_type = classify_blink(features)
 
                 if blink_type in ["double_blink", "triple_blink"]:
-                    classified_events.append({ #add data of blink to classified events
+                    classified_events.append({
                         "start": abs_start,
                         "end": abs_end,
                         "type": blink_type
                     })
                     print(f"blink type detected: {blink_type} from {abs_start} to {abs_end}")
 
-                    # Only prints/sends to Arduino if a valid sequence is detected
+                    time.sleep(1)  # wait to see if sequence forms
+
                     sequence = detect_blink_sequence(classified_events)
                     if sequence:
                         print(f"detected blink sequence: {sequence}")
                         send_to_arduino(sequence)
-
                     else:
+                        send_to_arduino(blink_type)
                         print("no valid sequence formed yet")
+
 
 
 if __name__ == "__main__":
